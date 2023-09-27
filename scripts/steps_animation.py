@@ -174,6 +174,7 @@ class Script(scripts.Script):
         duration,
         skip_steps,
         last_frame_duration,
+        preview_frame_duration,
         debug,
         run_incomplete,
         tmp_delete,
