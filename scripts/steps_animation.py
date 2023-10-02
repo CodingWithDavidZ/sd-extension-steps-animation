@@ -407,36 +407,32 @@ class Script(scripts.Script):
             ),  # detect if ffmpeg executable is present in path
         }
         # append conditionals to dictionary
-        vfilters = ''
-        params['minterpolate'] = '' if (params['interpolation'] == 'none') else f'minterpolate=mi_mode={params["interpolation"]},fifo'
-        params['tpad'] = '' if params['last_frame_duration'] == 0 else f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]}'
-        if params['minterpolate'] != '' or params['tpad'] != '':
-            vfilters = '-vf '
-        if params['minterpolate'] != '':
-            vfilters = vfilters + params['minterpolate']
-        if params['tpad'] != '':
-            if params['minterpolate'] != '':
-                vfilters = vfilters + ',' + params['tpad']
+        vfilters = ""
+        params["minterpolate"] = (
+            ""
+            if (params["interpolation"] == "none")
+            else f'minterpolate=mi_mode={params["interpolation"]},fifo'
+        )
+        # Use a single conditional statement to set tpad based on both conditions
+        params["tpad"] = ""
+        if params["last_frame_duration"] != 0:
+            params[
+                "tpad"
+            ] += f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]}'
+        if params["preview_frame_duration"] != 0:
+            params[
+                "tpad"
+            ] += f'{"," if params["tpad"] != "" else ""}tpad=stop_mode=clone:start_duration={params["preview_frame_duration"]}'
+        if params["tpad"] != "" or params["minterpolate"] != "":
+            vfilters = "-vf "
+        if params["minterpolate"] != "":
+            vfilters = vfilters + params["minterpolate"]
+        if params["tpad"] != "":
+            if params["minterpolate"] != "":
+                vfilters = vfilters + "," + params["tpad"]
             else:
-                vfilters = vfilters + params['tpad']
-        params['vfilters'] = vfilters
-
-        # vfilters = ''
-        # params['minterpolate'] = '' if (params['interpolation'] == 'none') else f'minterpolate=mi_mode={params["interpolation"]},fifo'
-        # if params['last_frame_duration'] != 0:
-        #     params['tpad'] += f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]}'
-        # if params['preview_frame_duration'] != 0:
-        #     params['tpad'] += f'{"," if params["tpad"] != "" else ""}tpad=stop_mode=clone:start_duration={params["preview_frame_duration"]}'
-        # if params['minterpolate'] != '' or params['tpad'] != '':
-        #     vfilters = '-vf '
-        # if params['minterpolate'] != '':
-        #     vfilters = vfilters + params['minterpolate']
-        # if params['tpad'] != '':
-        #     if params['minterpolate'] != '':
-        #         vfilters = vfilters + ',' + params['tpad']
-        #     else:
-        #         vfilters = vfilters + params['tpad']
-        # params['vfilters'] = vfilters
+                vfilters = vfilters + params["tpad"]
+        params["vfilters"] = vfilters
 
 
         if params["codec"] == "libvpx-vp9":
