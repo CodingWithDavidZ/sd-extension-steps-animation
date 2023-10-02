@@ -451,7 +451,7 @@ class Script(scripts.Script):
         if params["preview_frame_duration"] != 0:
             if params["tpad"] != "":
                 params["tpad"] += ","
-            params["tpad"] += f'tpad=start_mode=clone:stop_duration={params["preview_frame_duration"]}'
+            params["tpad"] += f'tpad=start_mode=clone:start_duration={params["preview_frame_duration"]}'
         if params["tpad"] != "" or params["minterpolate"] != "":
             vfilters = "-vf "
         if params["minterpolate"] != "":
