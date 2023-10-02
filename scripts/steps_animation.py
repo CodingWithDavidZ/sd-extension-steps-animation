@@ -407,34 +407,24 @@ class Script(scripts.Script):
             ),  # detect if ffmpeg executable is present in path
         }
         # append conditionals to dictionary
-        vfilters = ""
-        params["minterpolate"] = (
-            ""
-            if (params["interpolation"] == "none")
-            else f'minterpolate=mi_mode={params["interpolation"]},fifo'
-        )
-        preview_filter_chain = ""
-        last_frame_filter_chain = ""
+        vfilters = ''
+        params['minterpolate'] = '' if (params['interpolation'] == 'none') else f'minterpolate=mi_mode={params["interpolation"]},fifo'
+        params['tpad'] = '' if params['last_frame_duration'] == 0 else f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]}'
+        params['preview_frame_duration'] = 3  # Set the desired duration for preview frames
 
-        if params["preview_frame_duration"] != 0:
-            # Use tpad to prepend the last frame for preview
-            preview_filter_chain += f'tpad=stop_mode=clone:stop_duration={params["preview_frame_duration"]},'
-        if params["last_frame_duration"] != 0:
-            # Use tpad to add to the end of the video for the last frame duration
-            last_frame_filter_chain += f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]},'
+        if params['minterpolate'] != '' or params['tpad'] != '':
+            vfilters = '-vf '
 
-        # Combine the filter chains as needed with filter_complex
-        if preview_filter_chain and last_frame_filter_chain:
-            vfilters += f'filter_complex "[0:v] {preview_filter_chain} [preview]; [preview] {last_frame_filter_chain} [v]"'
-        elif preview_filter_chain:
-            vfilters += f'filter_complex "[0:v] {preview_filter_chain} [v]"'
-        elif last_frame_filter_chain:
-            vfilters += f'filter_complex "[0:v] {last_frame_filter_chain} [v]"'
+        if params['minterpolate'] != '':
+            vfilters = vfilters + params['minterpolate']
 
-        if params["minterpolate"] != "":
-            vfilters += f',{params["minterpolate"]}'
+        if params['tpad'] != '':
+            if params['minterpolate'] != '':
+                vfilters = vfilters + ',tpad=stop_mode=clone:stop_duration=' + str(params['last_frame_duration']) + ',tpad=stop_mode=clone:stop_duration=' + str(params['preview_frame_duration'])
+            else:
+                vfilters = vfilters + 'tpad=stop_mode=clone:stop_duration=' + str(params['last_frame_duration']) + ',tpad=stop_mode=clone:stop_duration=' + str(params['preview_frame_duration'])
 
-        params["vfilters"] = vfilters
+        params['vfilters'] = vfilters
 
 
 
