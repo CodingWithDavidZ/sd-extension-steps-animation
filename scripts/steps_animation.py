@@ -407,6 +407,7 @@ class Script(scripts.Script):
             ),  # detect if ffmpeg executable is present in path
         }
         # append conditionals to dictionary
+        vfilters = ""
         preview_filter_chain = ""
         last_frame_filter_chain = ""
 
