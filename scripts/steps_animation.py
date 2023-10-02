@@ -447,22 +447,20 @@ class Script(scripts.Script):
         # Use a single conditional statement to set tpad based on both conditions
         params["tpad"] = ""
         if params["last_frame_duration"] != 0:
-            params[
-                "tpad"
-            ] += f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]}'
+            params["tpad"] += f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]}'
         if params["preview_frame_duration"] != 0:
-            params[
-                "tpad"
-            ] += f'{"," if params["tpad"] != "" else ""}tpad=start_mode=clone:start_duration={params["preview_frame_duration"]}'
+            if params["tpad"] != "":
+                params["tpad"] += ","
+            params["tpad"] += f'tpad=start_mode=clone:stop_duration={params["preview_frame_duration"]}'
         if params["tpad"] != "" or params["minterpolate"] != "":
             vfilters = "-vf "
         if params["minterpolate"] != "":
-            vfilters = vfilters + params["minterpolate"]
+            vfilters += params["minterpolate"]
         if params["tpad"] != "":
             if params["minterpolate"] != "":
-                vfilters = vfilters + "," + params["tpad"]
+                vfilters += "," + params["tpad"]
             else:
-                vfilters = vfilters + params["tpad"]
+                vfilters += params["tpad"]
         params["vfilters"] = vfilters
 
         if params["codec"] == "libvpx-vp9":
