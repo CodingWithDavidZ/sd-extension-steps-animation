@@ -410,7 +410,7 @@ class Script(scripts.Script):
         vfilters = ''
         params['minterpolate'] = '' if (params['interpolation'] == 'none') else f'minterpolate=mi_mode={params["interpolation"]},fifo'
         params['tpad'] = '' if params['last_frame_duration'] == 0 else f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]}'
-        params['preview_frame_duration'] = 3  # Set the desired duration for preview frames
+  # Set the desired duration for preview frames
 
         if params['minterpolate'] != '' or params['tpad'] != '':
             vfilters = '-vf '
@@ -420,9 +420,9 @@ class Script(scripts.Script):
 
         if params['tpad'] != '':
             if params['minterpolate'] != '':
-                vfilters = vfilters + ',tpad=stop_mode=clone:stop_duration=' + str(params['last_frame_duration']) + ',tpad=stop_mode=clone:stop_duration=' + str(params['preview_frame_duration'])
+                vfilters = vfilters + ',tpad=stop_mode=clone:stop_duration=' + (params['last_frame_duration']) + ',tpad=stop_mode=clone:stop_duration=' + (params['preview_frame_duration'])
             else:
-                vfilters = vfilters + 'tpad=stop_mode=clone:stop_duration=' + str(params['last_frame_duration']) + ',tpad=stop_mode=clone:stop_duration=' + str(params['preview_frame_duration'])
+                vfilters = vfilters + 'tpad=stop_mode=clone:stop_duration=' + (params['last_frame_duration']) + ',tpad=stop_mode=clone:stop_duration=' + (params['preview_frame_duration'])
 
         params['vfilters'] = vfilters
 
