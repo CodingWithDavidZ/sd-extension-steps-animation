@@ -419,9 +419,9 @@ class Script(scripts.Script):
 
         if params['tpad'] != '':
             if params['minterpolate'] != '':
-                vfilters = vfilters + ',tpad=stop_mode=clone:stop_duration=' + str(params['last_frame_duration']) + ',tpad=stop_mode=clone:stop_duration=' + str(params['preview_frame_duration'])
+                vfilters = vfilters + ',tpad=stop_mode=clone:stop_duration=' + str(params['last_frame_duration']) + ',tpad=stop_mode=clone:start_duration=' + str(params['preview_frame_duration'])
             else:
-                vfilters = vfilters + 'tpad=stop_mode=clone:stop_duration=' + str(params['last_frame_duration']) + ',tpad=stop_mode=clone:stop_duration=' + str(params['preview_frame_duration'])
+                vfilters = vfilters + 'tpad=stop_mode=clone:stop_duration=' + str(params['last_frame_duration']) + ',tpad=stop_mode=clone:start_duration=' + str(params['preview_frame_duration'])
 
         params['vfilters'] = vfilters
 
