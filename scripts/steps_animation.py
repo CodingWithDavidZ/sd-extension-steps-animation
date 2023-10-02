@@ -419,18 +419,19 @@ class Script(scripts.Script):
 
         if params["preview_frame_duration"] != 0:
             # Use tpad to prepend the last frame for preview
-            preview_filter_chain += f'tpad=stop_mode=clone:stop_duration={params["preview_frame_duration"]}'
+            preview_filter_chain += f'tpad=stop_mode=clone:stop_duration={params["preview_frame_duration"]},'
         if params["last_frame_duration"] != 0:
             # Use tpad to add to the end of the video for last frame duration
-            last_frame_filter_chain += f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]}'
+            last_frame_filter_chain += f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]},'
 
         # Combine the filter chains as needed
         if preview_filter_chain:
             vfilters += preview_filter_chain
         if last_frame_filter_chain:
-            vfilters += ("," if vfilters else "") + last_frame_filter_chain
+            vfilters += last_frame_filter_chain
         if params["minterpolate"] != "":
-            vfilters += ("," if vfilters else "") + params["minterpolate"]
+            vfilters += "," if vfilters else ""
+            vfilters += params["minterpolate"]
 
         params["vfilters"] = vfilters
 
