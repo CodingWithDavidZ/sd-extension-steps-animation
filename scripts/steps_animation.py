@@ -427,11 +427,12 @@ class Script(scripts.Script):
         if preview_filter_chain:
             vfilters += preview_filter_chain
         if last_frame_filter_chain:
-            vfilters += ("," if vfilters else "") + last_frame_filter_chain
+            vfilters += ("" if vfilters == "" else ",") + last_frame_filter_chain
         if params["minterpolate"] != "":
-            vfilters += ("," if vfilters else "") + params["minterpolate"]
+            vfilters += ("" if vfilters == "" else ",") + params["minterpolate"]
 
         params["vfilters"] = vfilters
+
 
 
 
