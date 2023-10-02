@@ -413,25 +413,28 @@ class Script(scripts.Script):
             if (params["interpolation"] == "none")
             else f'minterpolate=mi_mode={params["interpolation"]},fifo'
         )
-        # Use a single conditional statement to set tpad based on both conditions
-        params["tpad"] = ""
-        if params["last_frame_duration"] != 0:
-            params[
-                "tpad"
-            ] += f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]}'
+        # Initialize separate filter chains for preview and last frame duration
+        preview_filter_chain = ""
+        last_frame_filter_chain = ""
+
         if params["preview_frame_duration"] != 0:
-            params[
-                "tpad"
-            ] += f'{"," if params["tpad"] != "" else ""}tpad=stop_mode=clone:start_duration={params["preview_frame_duration"]}'
-        if params["tpad"] != "" or params["minterpolate"] != "":
-            vfilters = "-vf "
+            # Use tpad to prepend the last frame for preview
+            preview_filter_chain += f'tpad=stop_mode=clone:stop_duration={params["preview_frame_duration"]}'
+        if params["last_frame_duration"] != 0:
+            # Use tpad to add to the end of the video for last frame duration
+            last_frame_filter_chain += f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]}'
+
+        # Combine the filter chains as needed
+        if preview_filter_chain:
+            vfilters += preview_filter_chain
+        if last_frame_filter_chain:
+            vfilters += "," if vfilters else ""
+            vfilters += last_frame_filter_chain
+
         if params["minterpolate"] != "":
-            vfilters = vfilters + params["minterpolate"]
-        if params["tpad"] != "":
-            if params["minterpolate"] != "":
-                vfilters = vfilters + "," + params["tpad"]
-            else:
-                vfilters = vfilters + params["tpad"]
+            vfilters += "," if vfilters else ""
+            vfilters += params["minterpolate"]
+
         params["vfilters"] = vfilters
 
 
