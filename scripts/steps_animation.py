@@ -407,13 +407,6 @@ class Script(scripts.Script):
             ),  # detect if ffmpeg executable is present in path
         }
         # append conditionals to dictionary
-        vfilters = ""
-        params["minterpolate"] = (
-            ""
-            if (params["interpolation"] == "none")
-            else f'minterpolate=mi_mode={params["interpolation"]},fifo'
-        )
-        # Initialize separate filter chains for preview and last frame duration
         preview_filter_chain = ""
         last_frame_filter_chain = ""
 
