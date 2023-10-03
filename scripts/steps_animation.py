@@ -437,11 +437,12 @@ class Script(scripts.Script):
 
         if params['tpad'] != '':
             if params['minterpolate'] != '':
-                vfilters = vfilters + f',tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]},setpts=PTS-STARTPTS [v]; [v]tpad=stop_mode=clone:start_duration={params["preview_frame_duration"]}'
+                vfilters = vfilters + f',tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]},setpts=PTS-STARTPTS+{params["last_frame_duration"]}/TB [v]; [v]tpad=stop_mode=clone:start_duration={params["preview_frame_duration"]}'
             else:
-                vfilters = vfilters + f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]},setpts=PTS-STARTPTS [v]; [v]tpad=stop_mode=clone:start_duration={params["preview_frame_duration"]}'
+                vfilters = vfilters + f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]},setpts=PTS-STARTPTS+{params["last_frame_duration"]}/TB [v]; [v]tpad=stop_mode=clone:start_duration={params["preview_frame_duration"]}'
 
         params['vfilters'] = vfilters
+
 
 
 
