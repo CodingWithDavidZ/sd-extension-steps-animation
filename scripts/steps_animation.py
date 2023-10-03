@@ -407,6 +407,24 @@ class Script(scripts.Script):
             ),  # detect if ffmpeg executable is present in path
         }
         # append conditionals to dictionary
+        # vfilters = ''
+        # params['minterpolate'] = '' if (params['interpolation'] == 'none') else f'minterpolate=mi_mode={params["interpolation"]},fifo'
+        # params['tpad'] = '' if params['last_frame_duration'] == 0 else f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]}'
+
+        # if params['minterpolate'] != '' or params['tpad'] != '':
+        #     vfilters = '-vf '
+
+        # if params['minterpolate'] != '':
+        #     vfilters = vfilters + params['minterpolate']
+
+        # if params['tpad'] != '':
+        #     if params['minterpolate'] != '':
+        #         vfilters = vfilters + ',tpad=stop_mode=clone:stop_duration=' + str(params['last_frame_duration']) + ',tpad=stop_mode=clone:start_duration=' + str(params['preview_frame_duration'])
+        #     else:
+        #         vfilters = vfilters + 'tpad=stop_mode=clone:stop_duration=' + str(params['last_frame_duration']) + ',tpad=stop_mode=clone:start_duration=' + str(params['preview_frame_duration'])
+
+        # params['vfilters'] = vfilters
+
         vfilters = ''
         params['minterpolate'] = '' if (params['interpolation'] == 'none') else f'minterpolate=mi_mode={params["interpolation"]},fifo'
         params['tpad'] = '' if params['last_frame_duration'] == 0 else f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]}'
@@ -419,9 +437,9 @@ class Script(scripts.Script):
 
         if params['tpad'] != '':
             if params['minterpolate'] != '':
-                vfilters = vfilters + ',tpad=stop_mode=clone:stop_duration=' + str(params['last_frame_duration']) + ',tpad=stop_mode=clone:start_duration=' + str(params['preview_frame_duration'])
+                vfilters = vfilters + f',tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]},setpts=PTS-STARTPTS [v]; [v]tpad=stop_mode=clone:start_duration={params["preview_frame_duration"]}'
             else:
-                vfilters = vfilters + 'tpad=stop_mode=clone:stop_duration=' + str(params['last_frame_duration']) + ',tpad=stop_mode=clone:start_duration=' + str(params['preview_frame_duration'])
+                vfilters = vfilters + f'tpad=stop_mode=clone:stop_duration={params["last_frame_duration"]},setpts=PTS-STARTPTS [v]; [v]tpad=stop_mode=clone:start_duration={params["preview_frame_duration"]}'
 
         params['vfilters'] = vfilters
 
